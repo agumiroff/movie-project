@@ -1,0 +1,29 @@
+services:
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      DB_HOST: "db"
+      DB_PORT: "5432"
+      DB_LOGIN: "postgres"
+      DB_NAME: "postgres"
+      DB_PASSWORD: "secret"
+      DB_SSLMODE: "disable"
+      DB_SCHEMA: "public"
+      MIGRATIONS_PATH: "./migrations"
+      ADDRESS: "0.0.0.0:8080"
+
+  db:
+    restart: unless-stopped
+    image: postgres:latest
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=movieapp
